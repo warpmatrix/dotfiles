@@ -29,6 +29,7 @@
     ~/.tmux.conf: .tmux.conf
     ~/.vim: .vim
     ~/.vimrc: .vimrc
+    ~/.wakatime.cfg: .wakatime.cfg
     ~/.xmodmap: .xmodmap
 
 - shell:
