@@ -1,0 +1,13 @@
+version: v1
+mig-configs:
+  all-disabled:
+    - devices: all
+      mig-enabled: false
+
+  all-balanced:
+    - devices: all
+      mig-enabled: true
+      mig-devices:
+        "1g.20gb": 1
+        "2g.20gb": 3
+
