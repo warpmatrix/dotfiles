@@ -25,6 +25,7 @@
     ~/.gdbinit: .gdbinit
     ~/.gitconfig: .gitconfig
     ~/.inputrc: .inputrc
+    ~/.pip: .pip
     ~/.profile: .profile
     ~/.tmux.conf: .tmux.conf
     ~/.vim: .vim
