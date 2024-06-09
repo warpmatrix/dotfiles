@@ -13,11 +13,19 @@
 - create:
     ~/.dotfiles/backup:
       mode: 0775
+    ~/.wakatime:
+      mode: 0775
 
 - shell:
   - 
     command: bash -c 'if [[ -f ~/.profile ]] && [[ ! -L ~/.profile ]]; then mv ~/.profile ~/.dotfiles/backup/; fi'
     description: Backup .profile file
+  - 
+    command: bash -c 'if [[ -d ~/.pip ]] && [[ ! -L ~/.pip ]]; then mv ~/.pip ~/.dotfiles/backup/; fi'
+    description: Backup .pip file
+  - 
+    command: bash -c 'if [[ -f ~/.gitconfig ]] && [[ ! -L ~/.gitconfig ]]; then mv ~/.gitconfig ~/.dotfiles/backup/; fi'
+    description: Backup .gitconfig file
 
 - link:
     ~/.condarc: .condarc
@@ -36,8 +44,8 @@
 - shell:
   - [git submodule update --init --recursive, Installing submodules]
   - 
-    command: sudo ./install -p dotbot-apt/apt.py -c configs/apt.conf.yaml
+    command: ./install -p dotbot-apt/apt.py -c configs/apt.conf.yaml
     description: Install apt packages
     stdout: true
-  - [bash -c 'sudo chsh -s $(which fish) $(whoami)', Making fish the default shell]
+  - [bash -c 'chsh -s $(which fish) $(whoami)', Making fish the default shell]
   - [fish -c 'fish_vi_key_bindings']
