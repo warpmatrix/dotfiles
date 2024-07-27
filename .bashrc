@@ -143,7 +143,6 @@ if [ -d /usr/local/cuda ]; then
     export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 fi
 
-# start up tmux
-# If not running interactively, do not do anything
-# [[ $- != *i* ]] && return
-# [[ -z "$TMUX" ]] && exec tmux
+if [ -d ~/.cargo ]; then
+    . "$HOME/.cargo/env"
+fi
