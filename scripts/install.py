@@ -1,51 +1,7 @@
 import argparse
-import os
-import urllib.request
-import shutil
-import subprocess
-import sys
-
-from loguru import logger
-from pathlib import Path
 from typing import Callable
 
-def download_file(url, output_path_str: str, replace: bool = False):
-    output_path = Path(output_path_str)
-    if output_path.exists() and not replace:
-        logger.info(f"File {output_path} exists")
-        return
-    
-    try:
-        os.makedirs(output_path.parent, exist_ok=True)
-        urllib.request.urlretrieve(url, output_path)
-        logger.info(f"File downloaded successfully to {output_path_str}")
-    except Exception as e:
-        logger.error(f"Failed to download file: {e}")
-        sys.exit(1)
-
-
-def is_root_user():
-    return os.geteuid() == 0
-
-
-def execute_command(command: str, run_as_root: bool = False):
-    args = command.split(" ")
-    if run_as_root and not is_root_user():
-        assert command_exists("sudo")
-        args = ["sudo"] + args
-
-    try:
-        subprocess.run(args)
-        command = " ".join(args)
-        logger.info(f"Command executed: {command}")
-    except Exception as e:
-        print(f"Failed to execute command: {e}")
-        sys.exit(1)
-
-
-def command_exists(command: str):
-    return shutil.which(command) is not None
-
+from utils import *
 
 def install_go():
     # ref: https://golang.google.cn/doc/install
