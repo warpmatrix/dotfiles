@@ -7,16 +7,16 @@ import sys
 from loguru import logger
 from pathlib import Path
 
-def download_file(url, output_path_str: str, replace: bool = False):
-    output_path = Path(output_path_str)
-    if output_path.exists() and not replace:
-        logger.info(f"File {output_path} exists")
+def download_file(url, output_path: str, force: bool = False):
+    file_path = Path(output_path)
+    if file_path.exists() and not force:
+        logger.info(f"File {file_path} exists")
         return
     
     try:
-        os.makedirs(output_path.parent, exist_ok=True)
-        urllib.request.urlretrieve(url, output_path)
-        logger.info(f"File downloaded successfully to {output_path_str}")
+        os.makedirs(file_path.parent, exist_ok=True)
+        urllib.request.urlretrieve(url, file_path)
+        logger.info(f"File downloaded successfully to {output_path}")
     except Exception as e:
         logger.error(f"Failed to download file: {e}")
         sys.exit(1)
