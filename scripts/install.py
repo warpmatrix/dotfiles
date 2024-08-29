@@ -1,4 +1,5 @@
 import argparse
+import pathlib
 from typing import Callable
 
 from utils import *
@@ -31,9 +32,22 @@ def parse_args():
     return args
 
 
+def install_pyenv():
+    # ref: https://github.com/pyenv/pyenv/
+    assert command_exists("curl")
+    execute_command("curl https://pyenv.run | bash")
+    if command_exists("apt"):
+        apt_plugin = "~/.dotfiles/dotbot-apt/apt.py"
+        assert pathlib.Path(apt_plugin).expanduser().exists()
+        config_path = "~/.dotfiles/configs/apt_pyenv_dep.conf.yaml"
+        assert pathlib.Path(config_path).expanduser().exists()
+        execute_command(f"~/.dotfiles/install -p {apt_plugin} -c {config_path}")
+
+
 install: dict[str, Callable] = {
     "go": install_go,
     "nsys": install_nsys_cli,
+    "pyenv": install_pyenv,
 }
 
 

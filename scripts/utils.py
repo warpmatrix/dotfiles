@@ -1,3 +1,4 @@
+import pathlib
 import os
 import urllib.request
 import shutil
@@ -5,11 +6,10 @@ import subprocess
 import sys
 
 from loguru import logger
-from pathlib import Path
 
 
 def download_file(url, output_path: str, force: bool = False):
-    file_path = Path(output_path)
+    file_path = pathlib.Path(output_path)
     if file_path.exists() and not force:
         logger.info(f"File {file_path} exists")
         return
