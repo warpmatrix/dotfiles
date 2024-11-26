@@ -1,2 +1,7 @@
 - apt:
   - fish
+  - curl
+  - net-tools
+  - iputils-ping
+  - tmux
+  - iftop
