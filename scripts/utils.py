@@ -1,3 +1,4 @@
+import logging
 import pathlib
 import os
 import urllib.request
@@ -5,7 +6,7 @@ import shutil
 import subprocess
 import sys
 
-from loguru import logger
+logger = logging.getLogger(__name__)
 
 
 def download_file(url, output_path: str, force: bool = False):

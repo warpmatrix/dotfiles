@@ -1,6 +1,6 @@
 import argparse
 import pathlib
-from typing import Callable
+from typing import Callable, Dict
 
 from utils import *
 
@@ -44,7 +44,7 @@ def install_pyenv():
         execute_command(f"~/.dotfiles/install -p {apt_plugin} -c {config_path}")
 
 
-install: dict[str, Callable] = {
+install: Dict[str, Callable] = {
     "go": install_go,
     "nsys": install_nsys_cli,
     "pyenv": install_pyenv,
