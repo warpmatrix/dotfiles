@@ -41,7 +41,7 @@ def install_pyenv():
         assert pathlib.Path(apt_plugin).expanduser().exists()
         config_path = "~/.dotfiles/configs/apt_pyenv_dep.conf.yaml"
         assert pathlib.Path(config_path).expanduser().exists()
-        execute_command(f"~/.dotfiles/install -p {apt_plugin} -c {config_path}")
+        execute_command(f"~/.dotfiles/install -p {apt_plugin} -c {config_path}", run_as_root=True)
 
 
 install: Dict[str, Callable] = {
