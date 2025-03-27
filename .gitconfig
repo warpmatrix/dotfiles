@@ -15,7 +15,7 @@
     cm = commit
     br = branch
     rb = rebase
-    lg = log --graph --decorate --oneline
+    lg = log --graph --decorate --oneline --date-order
     unstage = reset HEAD --
 [core]
     editor = vim
