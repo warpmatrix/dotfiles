@@ -1,7 +1,5 @@
 import enum
-import pathlib
 import os
-import urllib.request
 import shutil
 import subprocess
 import sys
@@ -22,21 +20,6 @@ class CommandFile(enum.auto):
     PIPE = subprocess.PIPE
 
 
-def download_file(url: str, output_path: str, force: bool = False):
-    file_path = pathlib.Path(output_path)
-    if file_path.exists() and not force:
-        logger.info(f"File {file_path} exists")
-        return
-
-    try:
-        os.makedirs(file_path.parent, exist_ok=True)
-        urllib.request.urlretrieve(url, file_path)
-        logger.info(f"File downloaded successfully to {output_path}")
-    except Exception as e:
-        logger.error(f"Failed to download file: {e}")
-        sys.exit(1)
-
-
 def is_root_user():
     return os.geteuid() == 0
 
@@ -49,6 +32,7 @@ def to_sudo_command(command: str):
 
 
 def execute_command(command: str, run_as_root: bool = False):
+    # support redirect using '>' or '<'
     if run_as_root and not is_root_user():
         command = to_sudo_command(command)
 

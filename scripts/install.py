@@ -2,7 +2,11 @@ import argparse
 import pathlib
 from typing import Callable, Dict
 
-from utils import *
+from scripts.utils.command_utils import (
+    command_exists,
+    execute_command,
+)
+from scripts.utils.operator_utils import download_file
 
 
 def install_go():
