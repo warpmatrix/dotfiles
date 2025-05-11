@@ -1,4 +1,4 @@
-import logging
+import enum
 import pathlib
 import os
 import urllib.request
@@ -6,10 +6,23 @@ import shutil
 import subprocess
 import sys
 
-logger = logging.getLogger(__name__)
+from loguru import logger
+from typing import (
+    NamedTuple,
+    Optional,
+)
 
 
-def download_file(url, output_path: str, force: bool = False):
+class CommandOutput(NamedTuple):
+    exit_code: int
+    output: str
+
+
+class CommandFile(enum.auto):
+    PIPE = subprocess.PIPE
+
+
+def download_file(url: str, output_path: str, force: bool = False):
     file_path = pathlib.Path(output_path)
     if file_path.exists() and not force:
         logger.info(f"File {file_path} exists")
@@ -28,32 +41,40 @@ def is_root_user():
     return os.geteuid() == 0
 
 
-def get_output(command: str, run_as_root: bool = False):
+def to_sudo_command(command: str):
+    assert command_exists("sudo")
+    args = ["sudo"] + command.split()
+    command = " ".join(args)
+    return command
+
+
+def execute_command(command: str, run_as_root: bool = False):
     if run_as_root and not is_root_user():
-        assert command_exists("sudo")
-        command = "sudo " + command
+        command = to_sudo_command(command)
 
     try:
-        logger.debug(f"get output: {command}")
-        return subprocess.getoutput(command)
+        logger.debug(f"executing command: {command}")
+        status_output = subprocess.getstatusoutput(command)
+        return CommandOutput(*status_output)
     except Exception as e:
         print(f"Failed to execute command: {command}, {e}")
         sys.exit(1)
 
 
-def execute_command(command: str, run_as_root: bool = False, input=None, text=None):
-    args = command.split(" ")
+def create_process(
+    command: str,
+    run_as_root: bool = False,
+    stdin: Optional[CommandFile] = None,
+    stdout: Optional[CommandFile] = None,
+    stderr: Optional[CommandFile] = None,
+):
     if run_as_root and not is_root_user():
-        assert command_exists("sudo")
-        command = "sudo " + command
+        command = to_sudo_command(command)
 
-    try:
-        logger.info(f"executing command: {command}")
-        subprocess.run(command, shell=True)
-        command = " ".join(args)
-    except Exception as e:
-        print(f"Failed to execute command: {command}, {e}")
-        sys.exit(1)
+    logger.debug(f"create process with command: {command}")
+    args = command.split()
+    cmd = subprocess.Popen(args, stdin=stdin, stdout=stdout, stderr=stderr)
+    return cmd
 
 
 def command_exists(command: str):
