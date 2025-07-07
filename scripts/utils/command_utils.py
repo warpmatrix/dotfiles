@@ -1,10 +1,10 @@
 import enum
+import logging as logger
 import os
 import shutil
 import subprocess
 import sys
 
-from loguru import logger
 from typing import (
     NamedTuple,
     Optional,
