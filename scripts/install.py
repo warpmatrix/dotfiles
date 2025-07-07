@@ -1,8 +1,12 @@
 import argparse
 import pathlib
-from typing import Callable
+from typing import Callable, Dict
 
-from utils import *
+from scripts.utils.command_utils import (
+    command_exists,
+    execute_command,
+)
+from scripts.utils.operator_utils import download_file
 
 
 def install_go():
@@ -41,10 +45,10 @@ def install_pyenv():
         assert pathlib.Path(apt_plugin).expanduser().exists()
         config_path = "~/.dotfiles/configs/apt_pyenv_dep.conf.yaml"
         assert pathlib.Path(config_path).expanduser().exists()
-        execute_command(f"~/.dotfiles/install -p {apt_plugin} -c {config_path}")
+        execute_command(f"~/.dotfiles/install -p {apt_plugin} -c {config_path}", run_as_root=True)
 
 
-install: dict[str, Callable] = {
+install: Dict[str, Callable] = {
     "go": install_go,
     "nsys": install_nsys_cli,
     "pyenv": install_pyenv,

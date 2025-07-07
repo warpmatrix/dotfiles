@@ -37,6 +37,9 @@ nnoremap <C-k> <C-y>
 noremap H ^
 noremap L $
 
+" press enter to send a command from a vim file to a tmux window
+" nnoremap <enter> :.w !xargs -0ri tmux send -t1 {}<CR>j
+
 
 " local customizations in ~/.vimrc_local
 " let $LOCALFILE=expand("~/.vimrc_local")

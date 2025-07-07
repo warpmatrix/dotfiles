@@ -1,8 +1,11 @@
 if status is-interactive
     # Commands to run in interactive sessions can go here
-    if not set -q TMUX
+    if command -v fastfetch &> /dev/null
+        fastfetch
+    end
+    if command -v tmux &> /dev/null; and not set -q TMUX
         if tmux has-session -t home
-            exec tmux attach-session -t home
+            tmux attach-session -t home
         else
             tmux new-session -s home
         end

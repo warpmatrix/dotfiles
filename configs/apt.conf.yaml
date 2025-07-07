@@ -4,3 +4,4 @@
   - net-tools
   - iputils-ping
   - tmux
+  - iftop
