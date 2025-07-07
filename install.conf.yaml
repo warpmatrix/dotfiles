@@ -30,10 +30,10 @@
 - link:
     ~/.condarc: .condarc
     ~/.config/fish/config.fish: .config/fish/config.fish
+    ~/.config/git/config: .config/git/config
+    ~/.config/pip/pip.conf: .config/pip/pip.conf
     ~/.gdbinit: .gdbinit
-    ~/.gitconfig: .gitconfig
     ~/.inputrc: .inputrc
-    ~/.pip: .pip
     ~/.profile: .profile
     ~/.tmux.conf: .tmux.conf
     ~/.vim: .vim

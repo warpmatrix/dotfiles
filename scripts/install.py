@@ -1,4 +1,5 @@
 import argparse
+import logging as logger
 import pathlib
 from typing import Callable, Dict
 
@@ -8,11 +9,12 @@ from scripts.utils.command_utils import (
 )
 from scripts.utils.operator_utils import download_file
 
+logger.basicConfig(level=logger.INFO)
 
 def install_go():
     # ref: https://golang.google.cn/doc/install
     url = "https://golang.google.cn/dl/go1.22.4.linux-amd64.tar.gz"
-    output_path = "downloads/go1.22.4.linux-amd64.tar.gz"
+    output_path = "./downloads/go1.22.4.linux-amd64.tar.gz"
 
     download_file(url, output_path)
     execute_command("rm -rf /usr/local/go", run_as_root=True)
@@ -27,15 +29,6 @@ def install_nsys_cli():
     execute_command(f"apt install {output_path}", run_as_root=True)
 
 
-def parse_args():
-    parser = argparse.ArgumentParser()
-    cmds = list(install.keys())
-    parser.add_argument("command", type=str, help=f"the required command, choice: {cmds}")
-    parser.add_argument("--force", "-f", action="store_true")
-    args = parser.parse_args()
-    return args
-
-
 def install_pyenv():
     # ref: https://github.com/pyenv/pyenv/
     assert command_exists("curl")
@@ -48,10 +41,31 @@ def install_pyenv():
         execute_command(f"~/.dotfiles/install -p {apt_plugin} -c {config_path}", run_as_root=True)
 
 
+def install_fastfetch():
+    arch = execute_command("arch").output
+    if arch == "x86_64":
+        arch = "amd64"
+    url = f"https://github.com/fastfetch-cli/fastfetch/releases/download/2.47.0/fastfetch-linux-{arch}.deb"
+    output_path = f"./downloads/fastfetch-linux-{arch}.deb"
+    download_file(url, output_path)
+    execute_command(f"apt install {output_path}", run_as_root=True)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    cmds = list(install.keys())
+    parser.add_argument("command", type=str, help=f"the required command, choice: {cmds}")
+    parser.add_argument("--force", "-f", action="store_true")
+    args = parser.parse_args()
+    return args
+
+
+# using typing for better compatibility
 install: Dict[str, Callable] = {
     "go": install_go,
     "nsys": install_nsys_cli,
     "pyenv": install_pyenv,
+    "fastfetch": install_fastfetch,
 }
 
 
