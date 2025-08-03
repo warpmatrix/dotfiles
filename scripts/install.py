@@ -7,6 +7,10 @@ from scripts.utils.command_utils import (
     command_exists,
     execute_command,
 )
+from scripts.utils.package_utils import (
+    install_package,
+    update_package_manager,
+)
 from scripts.utils.operator_utils import download_file
 from scripts.utils.os_utils import (
     get_distribution,
@@ -26,11 +30,11 @@ def install_cuda(cuda_version: str = "12-9"):
     output_path = "./downloads/cuda-keyring_1.1-1_all.deb"
     download_file(url, output_path)
     execute_command(f"dpkg -i {output_path}", run_as_root=True)
-    execute_command("apt-get update", run_as_root=True)
+    update_package_manager()
     if not command_exists("nvidia-smi"):
-        execute_command("apt-get install -y nvidia-open", run_as_root=True)
+        install_package("nvidia-open")
     assert command_exists("nvidia-smi"), "nvidia-smi not found"
-    execute_command(f"apt-get install -y cuda-toolkit-{cuda_version}", run_as_root=True)
+    install_package(f"cuda-toolkit-{cuda_version}")
 
 
 def install_go():
@@ -49,7 +53,7 @@ def install_nsys_cli():
     output_path = "./downloads/NsightSystems-linux-cli-public-2024.5.1.113-3461954.deb"
     download_file(url, output_path)
     if command_exists("apt"):
-        execute_command(f"apt install {output_path}", run_as_root=True)
+        install_package(output_path)
 
 
 def install_pyenv():
@@ -73,7 +77,7 @@ def install_fastfetch():
     url = f"https://github.com/fastfetch-cli/fastfetch/releases/download/2.47.0/fastfetch-linux-{arch}.deb"
     output_path = f"./downloads/fastfetch-linux-{arch}.deb"
     download_file(url, output_path)
-    execute_command(f"apt install {output_path}", run_as_root=True)
+    install_package(output_path)
 
 
 def parse_args():
