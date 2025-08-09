@@ -21,17 +21,22 @@
     command: bash -c 'if [[ -f ~/.profile ]] && [[ ! -L ~/.profile ]]; then mv ~/.profile ~/.dotfiles/backup/; fi'
     description: Backup .profile file
   - 
-    command: bash -c 'if [[ -d ~/.pip ]] && [[ ! -L ~/.pip ]]; then mv ~/.pip ~/.dotfiles/backup/; fi'
-    description: Backup .pip file
+    command: bash -c 'if [[ -f ~/.config/pip/pip.conf ]] && [[ ! -L ~/.config/pip/pip.conf ]]; then mv ~/.config/pip/pip.conf ~/.dotfiles/backup/pip.conf; fi'
+    description: Backup pip.conf file
   - 
-    command: bash -c 'if [[ -f ~/.gitconfig ]] && [[ ! -L ~/.gitconfig ]]; then mv ~/.gitconfig ~/.dotfiles/backup/; fi'
+    command: bash -c 'if [[ -f ~/.config/git/config ]] && [[ ! -L ~/.config/git/config ]]; then mv ~/.config/git/config ~/.dotfiles/backup/.gitconfig; fi'
     description: Backup .gitconfig file
+  - 
+    command: bash -c 'if [[ -f ~/.bashrc ]] && [[ ! -L ~/.bashrc ]]; then mv ~/.bashrc ~/.dotfiles/backup/; fi'
+    description: Backup .bashrc file
 
 - link:
     ~/.condarc: .condarc
     ~/.config/fish/config.fish: .config/fish/config.fish
     ~/.config/git/config: .config/git/config
     ~/.config/pip/pip.conf: .config/pip/pip.conf
+    ~/.config/uv/uv.toml: .config/uv/uv.toml
+    ~/.bashrc: .bashrc
     ~/.gdbinit: .gdbinit
     ~/.inputrc: .inputrc
     ~/.profile: .profile
@@ -48,4 +53,3 @@
     description: Install apt packages
     stdout: true
   - [bash -c 'chsh -s $(which fish) $(whoami)', Making fish the default shell]
-  - [fish -c 'fish_vi_key_bindings']

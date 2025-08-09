@@ -135,7 +135,7 @@ fi
 set -o vi
 
 if [ -f ~/.xmodmap ]; then
-    xmodmap ~/.xmodmap
+    command -v xmodmap &> /dev/null && xmodmap ~/.xmodmap
 fi
 
 if [ -d /usr/local/cuda ]; then

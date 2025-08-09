@@ -3,7 +3,6 @@ import logging as logger
 import os
 import shutil
 import subprocess
-import sys
 
 from typing import (
     NamedTuple,
@@ -36,13 +35,14 @@ def execute_command(command: str, run_as_root: bool = False):
     if run_as_root and not is_root_user():
         command = to_sudo_command(command)
 
-    try:
-        logger.debug(f"executing command: {command}")
-        status_output = subprocess.getstatusoutput(command)
-        return CommandOutput(*status_output)
-    except Exception as e:
-        print(f"Failed to execute command: {command}, {e}")
-        sys.exit(1)
+    logger.debug(f"executing command: {command}")
+    status_output = subprocess.getstatusoutput(command)
+    output = CommandOutput(*status_output)
+    if output.exit_code != 0:
+        logger.warning(f"Failed to execute command: {command}, {output.output}")
+    else:
+        logger.info(f"Command executed successfully: {command}")
+    return output
 
 
 def create_process(

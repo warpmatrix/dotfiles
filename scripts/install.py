@@ -7,9 +7,35 @@ from scripts.utils.command_utils import (
     command_exists,
     execute_command,
 )
+from scripts.utils.package_utils import (
+    install_package,
+    update_package_manager,
+)
 from scripts.utils.operator_utils import download_file
+from scripts.utils.os_utils import (
+    get_distribution,
+    get_version,
+    get_architecture,
+)
 
 logger.basicConfig(level=logger.INFO)
+
+
+def install_cuda(cuda_version: str = "12-9"):
+    distribution = get_distribution()
+    assert distribution == "ubuntu"
+    version = get_version()
+    arch = get_architecture()
+    url = f"https://developer.download.nvidia.com/compute/cuda/repos/{distribution}{version}/{arch}/cuda-keyring_1.1-1_all.deb"
+    output_path = "./downloads/cuda-keyring_1.1-1_all.deb"
+    download_file(url, output_path)
+    execute_command(f"dpkg -i {output_path}", run_as_root=True)
+    update_package_manager()
+    if not command_exists("nvidia-smi"):
+        install_package("nvidia-open")
+    assert command_exists("nvidia-smi"), "nvidia-smi not found"
+    install_package(f"cuda-toolkit-{cuda_version}")
+
 
 def install_go():
     # ref: https://golang.google.cn/doc/install
@@ -26,7 +52,8 @@ def install_nsys_cli():
     url = "https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/2024_5/NsightSystems-linux-cli-public-2024.5.1.113-3461954.deb"
     output_path = "./downloads/NsightSystems-linux-cli-public-2024.5.1.113-3461954.deb"
     download_file(url, output_path)
-    execute_command(f"apt install {output_path}", run_as_root=True)
+    if command_exists("apt"):
+        install_package(output_path)
 
 
 def install_pyenv():
@@ -38,23 +65,27 @@ def install_pyenv():
         assert pathlib.Path(apt_plugin).expanduser().exists()
         config_path = "~/.dotfiles/configs/apt_pyenv_dep.conf.yaml"
         assert pathlib.Path(config_path).expanduser().exists()
-        execute_command(f"~/.dotfiles/install -p {apt_plugin} -c {config_path}", run_as_root=True)
+        execute_command(
+            f"~/.dotfiles/install -p {apt_plugin} -c {config_path}", run_as_root=True
+        )
 
 
 def install_fastfetch():
-    arch = execute_command("arch").output
+    arch = get_architecture()
     if arch == "x86_64":
         arch = "amd64"
     url = f"https://github.com/fastfetch-cli/fastfetch/releases/download/2.47.0/fastfetch-linux-{arch}.deb"
     output_path = f"./downloads/fastfetch-linux-{arch}.deb"
     download_file(url, output_path)
-    execute_command(f"apt install {output_path}", run_as_root=True)
+    install_package(output_path)
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     cmds = list(install.keys())
-    parser.add_argument("command", type=str, help=f"the required command, choice: {cmds}")
+    parser.add_argument(
+        "command", type=str, help=f"the required command, choice: {cmds}"
+    )
     parser.add_argument("--force", "-f", action="store_true")
     args = parser.parse_args()
     return args
@@ -62,10 +93,11 @@ def parse_args():
 
 # using typing for better compatibility
 install: Dict[str, Callable] = {
+    "cuda": install_cuda,
+    "fastfetch": install_fastfetch,
     "go": install_go,
     "nsys": install_nsys_cli,
     "pyenv": install_pyenv,
-    "fastfetch": install_fastfetch,
 }
 
 

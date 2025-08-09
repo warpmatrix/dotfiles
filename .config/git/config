@@ -16,7 +16,7 @@
     br = branch
     rb = rebase
     lg = log --graph --decorate --oneline --date-order
-    unstage = reset HEAD --
+    unstage = restore --staged --
 [core]
     editor = vim
 [filter "lfs"]
@@ -24,3 +24,5 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
+[lfs]
+	cachecredentials = true

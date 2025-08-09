@@ -1,7 +1,10 @@
 - apt:
   - fish
+  - vim
   - curl
   - net-tools
   - iputils-ping
   - tmux
+  - htop
   - iftop
+  - btop

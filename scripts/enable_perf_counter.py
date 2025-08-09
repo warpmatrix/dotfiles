@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from scripts.utils.command_utils import (
     CommandFile,
@@ -9,6 +10,7 @@ from scripts.utils.command_utils import (
 def enable_perf_counter():
     conf_path = "/etc/modprobe.d/perf-counter.conf"
     f = Path(conf_path)
+    os.makedirs(f.parent, exist_ok=True)
     if not f.exists():
         execute_command(f"touch {conf_path}", run_as_root=True)
 

@@ -23,6 +23,7 @@ set incsearch
 
 " set mouse+=a
 set shortmess+=I
+set nowrap
 
 set backspace=indent,eol,start
 set laststatus=2
