@@ -1,3 +1,4 @@
+distro
 alibabacloud_credentials==0.3.4
 alibabacloud_ecs20140526==4.1.9
 alibabacloud_tea_openapi==0.3.10

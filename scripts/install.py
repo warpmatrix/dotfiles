@@ -49,9 +49,8 @@ def install_go():
 
 def install_nsys_cli():
     # ref: https://developer.nvidia.com/nsight-systems/get-started
-    url = "https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/2024_5/NsightSystems-linux-cli-public-2024.5.1.113-3461954.deb"
-    output_path = "./downloads/NsightSystems-linux-cli-public-2024.5.1.113-3461954.deb"
-    download_file(url, output_path)
+    url = "https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/2025_5/NsightSystems-linux-cli-public-2025.5.1.121-3638078.deb"
+    output_path = download_file(url)
     if command_exists("apt"):
         install_package(output_path)
 
