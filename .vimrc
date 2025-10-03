@@ -4,6 +4,9 @@ filetype off
 filetype plugin on
 filetype indent on
 
+syntax on
+
+" indent related
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
@@ -11,19 +14,22 @@ set expandtab
 set autoindent
 set smarttab
 
-set relativenumber
-set number
-
-syntax on
-" set smoothscroll
+" search related
 set hlsearch
 set ignorecase
 set smartcase
 set incsearch
 
-" set mouse+=a
-set shortmess+=I
+" line number related
+set relativenumber  " show current line number
+set number
+
+" other
 set nowrap
+set smoothscroll
+
+set mouse+=a
+set shortmess+=I
 
 set backspace=indent,eol,start
 set laststatus=2
@@ -41,6 +47,7 @@ noremap L $
 " press enter to send a command from a vim file to a tmux window
 " nnoremap <enter> :.w !xargs -0ri tmux send -t1 {}<CR>j
 
+nnoremap <Leader>b :buffers<CR>:buffer<Space>
 
 " local customizations in ~/.vimrc_local
 " let $LOCALFILE=expand("~/.vimrc_local")
